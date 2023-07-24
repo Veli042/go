@@ -26,7 +26,7 @@ func main() {
 	defer db.Close()
 
 	sqlStatement := `
-INSERT INTO users (age, email, first_name, last_name,money)
+INSERT INTO musteri (age, email, first_name, last_name, money)
 VALUES ($1, $2, $3, $4, $5)
 RETURNING id`
 	var (
