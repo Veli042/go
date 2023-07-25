@@ -26,49 +26,48 @@ func main() {
 	defer db.Close()
 
 	sqlStatement := `
-INSERT INTO musteri (age, email, first_name, last_name, money)
-VALUES ($1, $2, $3, $4, $5)
+INSERT INTO urun (name,product,stock,category)
+VALUES($1, $2, $3, $4)	
 RETURNING id`
+
 	var (
-		age        int
-		email      string
-		first_name string
-		last_name  string
-		money      float32
-		id1        int
-		process    string
-		update1    int
+		name     string
+		product  string
+		stock    int
+		category string
+		process  string
+		id1      int
+		update1  int
 	)
 	for {
-		fmt.Println("for new customer (1) for existing customer(2) key in:")
+
+		fmt.Println("for new product (1), for existing product (2) key in:")
 		fmt.Scan(&process)
+
 		if process == "1" {
-			fmt.Println("Enter your age:")
-			fmt.Scan(&age)
+			fmt.Println("enter the product name:")
+			fmt.Scan(&name)
 
-			fmt.Println("Enter your email:")
-			fmt.Scan(&email)
+			fmt.Println("enter the product brand:")
+			fmt.Scan(&product)
 
-			fmt.Println("Enter your first_name:")
-			fmt.Scan(&first_name)
+			fmt.Println("enter the product stock:")
+			fmt.Scan(&stock)
 
-			fmt.Println("Enter your last_name:")
-			fmt.Scan(&last_name)
-
-			fmt.Println("Enter your money:")
-			fmt.Scan(&money)
+			fmt.Println("enter the product category:")
+			fmt.Scan(&category)
 
 			id := 0
-			err = db.QueryRow(sqlStatement, age, email, first_name, last_name, money).Scan(&id)
+			err = db.QueryRow(sqlStatement, name, product, stock, category).Scan(&id)
 			if err != nil {
 				panic(err)
 			}
-
-			fmt.Println("New record ID is:", id)
+			fmt.Println("new record id is:", id)
 		} else if process == "2" {
 			break
 		}
 	}
+
 	for {
 		fmt.Println("for deletion (-),for updation (+),for terminate (0) key in:")
 		fmt.Scan(&process)
@@ -94,9 +93,8 @@ func delete(id1 int) int {
 		panic(err)
 	}
 	defer db.Close()
-
 	sqlStatement := `
-DELETE FROM musteri
+DELETE FROM urun
 WHERE id = $1;`
 	var delete int
 	fmt.Println("enter your want delete id:")
@@ -122,35 +120,35 @@ func update(update1 int) int {
 	defer db.Close()
 
 	sqlStatement := `
-UPDATE musteri
-SET first_name =$2 , last_name = $3 , email = $4 , money = $5
+UPDATE urun
+SET name =$2 , product = $3 , stock = $4 , category = $5
 WHERE id=$1
 RETURNING id;`
 	var (
-		first_name1 string
-		last_name1  string
-		id2         int
-		email       string
-		id          int
-		money       int
+		name     string
+		product  string
+		id2      int
+		stock    string
+		id       int
+		category int
 	)
 
 	fmt.Println("enter the id you want to change:")
 	fmt.Scan(&id2)
 
-	fmt.Println("enter the new first name:")
-	fmt.Scan(&first_name1)
+	fmt.Println("enter the new name:")
+	fmt.Scan(&name)
 
-	fmt.Println("enter the new last name:")
-	fmt.Scan(&last_name1)
+	fmt.Println("enter the new product name:")
+	fmt.Scan(&product)
 
-	fmt.Println("enter the new e-mail:")
-	fmt.Scan(&email)
+	fmt.Println("enter the new stock:")
+	fmt.Scan(&stock)
 
-	fmt.Println("enter the new money:")
-	fmt.Scan(&money)
+	fmt.Println("enter the new category:")
+	fmt.Scan(&category)
 
-	err = db.QueryRow(sqlStatement, id2, first_name1, last_name1, email, money).Scan(&id)
+	err = db.QueryRow(sqlStatement, id2, name, product, stock, category).Scan(&id)
 	if err != nil {
 		panic(err)
 	}
