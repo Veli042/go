@@ -26,18 +26,19 @@ func main() {
 	defer db.Close()
 
 	sqlStatement := `
-INSERT INTO urun (name,product,stock,category)
-VALUES($1, $2, $3, $4)	
+INSERT INTO urun (name,product,stock,category,unit_price)
+VALUES($1, $2, $3, $4, $5)	
 RETURNING id`
 
 	var (
-		name     string
-		product  string
-		stock    int
-		category string
-		process  string
-		id1      int
-		update1  int
+		name       string
+		product    string
+		stock      int
+		category   string
+		process    string
+		id1        int
+		update1    int
+		unit_price int
 	)
 	for {
 
@@ -57,8 +58,11 @@ RETURNING id`
 			fmt.Println("enter the product category:")
 			fmt.Scan(&category)
 
+			fmt.Println("enter the product unit price:")
+			fmt.Scan(&unit_price)
+
 			id := 0
-			err = db.QueryRow(sqlStatement, name, product, stock, category).Scan(&id)
+			err = db.QueryRow(sqlStatement, name, product, stock, category, unit_price).Scan(&id)
 			if err != nil {
 				panic(err)
 			}
